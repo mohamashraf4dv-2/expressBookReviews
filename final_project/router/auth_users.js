@@ -7,7 +7,7 @@ let users = [];
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
-return users.some(u=> u.username !== username);
+return users.some(u=> u.username === username)? false:true;
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
@@ -23,7 +23,7 @@ regd_users.post("/login", (req,res) => {
   if(username && password && authenticatedUser(username,password)){
     const token = jwt.sign({username:username},"access")
     req.session.authorization = token ;
-  return res.status(200).json({message: "Signed in successfully"});
+  return res.status(200).json({message: "Signed in successfully",token});
 
   }
   return res.status(400).json({message: "Invalid Credintials"});
@@ -53,7 +53,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
     }
   return res.status(404).json({message: "there are no review found"});
 
-}
+})
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
